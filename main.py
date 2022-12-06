@@ -3,14 +3,14 @@ This is the main file for the project. It contains the entire code for the proje
 The Goal of this project is to create a simple GUI to download videos or playlists from YouTube.
 **********
 Ideas:
-- Resolution
-- Downloading progress
-- save name
-- audio and video and file format options
-- progress bar
-- expected time and file size
-- video title
-- hyperlink to open file
+- Resolution [✅]
+- Downloading progress [✅]
+- save name [❌]
+- audio and video and file format options [❌]
+- progress bar [✅]
+- expected time and file size [✅]
+- video title [✅]
+- hyperlink to open file [❌]
 """
 
 import tkinter as tk
