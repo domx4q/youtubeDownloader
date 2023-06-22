@@ -24,6 +24,8 @@ import sys
 import time as t
 import _thread
 from datetime import datetime
+import os
+from moviepy.editor import *
 
 
 class GUI:
@@ -35,6 +37,7 @@ class GUI:
         self.download_button = None
         self.hidden_group = None
         self.videoSettings = {}
+        self.file_name: ctk.CTkEntry = None
 
         ctk.set_appearance_mode("dark")
         ctk.set_default_color_theme("blue")
@@ -64,6 +67,10 @@ class GUI:
         mode_select.pack(fill="x", padx=10, pady=10)
         self.resolution_select = ctk.CTkComboBox(self.hidden_group, values=["Lädt ..."], command=lambda x: self.update_settings("resolution", x))
         self.resolution_select.pack(fill="x", padx=10, pady=10)
+
+        self.file_name = ctk.CTkEntry(self.hidden_group, placeholder_text="Enter file name")
+        self.file_name.pack(fill="x", padx=10, pady=10)
+
         # endregion hidden group
 
         self.download_button = ctk.CTkButton(self.app, text="Download")
@@ -129,8 +136,30 @@ class GUI:
                 stream = streams.filter(progressive=True, resolution=settings["resolution"]).first()
         else:
             stream = streams.filter(only_audio=True).first()
-        stream.download("downloads", skip_existing=False)
+        extension = "." + stream.default_filename.rsplit(".", 1)[1]
+        if self.file_name.get() == "":
+            fileName = video.title
+        else:
+            fileName = self.file_name.get()
+        IS_MP3 = False
+        if self.file_name.get().endswith(".mp3"):
+            IS_MP3 = True
+        else:
+            fileName = fileName + extension
+        stream.download("downloads", skip_existing=False, filename=fileName)
         self.print("Downloaded")
+        if IS_MP3:
+            self.convertToMP3("downloads/" + fileName)
+            self.print("Converted to MP3")
+
+    def convertToMP3(self, fileName):
+        # rename
+        os.rename(fileName, fileName.replace(".mp4", ".mp3"))
+        return fileName.replace(".mp4", ".mp3")
+        video = VideoFileClip(fileName)
+        video.audio.write_audiofile(fileName.replace(".mp4", ".mp3"))
+        os.remove(fileName)
+        return fileName.replace(".mp4", ".mp3")
 
     def search(self, url):
         try:
@@ -138,9 +167,11 @@ class GUI:
 
             resolutions = list(video.streams.filter(progressive=True).order_by("resolution").desc())
             resolutions = [resolution.resolution for resolution in resolutions]
+            resolutions.append("max")
             self.resolution_select.destroy() # we need to recreate the entire combobox because we can't change the values
             self.resolution_select = ctk.CTkComboBox(self.hidden_group, values=resolutions, command=lambda x: self.update_settings("resolution", x))
             self.resolution_select.pack(fill="x", padx=10, pady=10)
+            self.file_name.configure(placeholder_text=video.title)
 
             self.download_button.pack_forget()
             self.hidden_group.pack(fill="x", padx=10, pady=10)
