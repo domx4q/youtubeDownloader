@@ -99,7 +99,7 @@ class GUI:
 
     def print(self, text, color="white"):
         self.feedback_label.configure(text=text, text_color=color)
-        self.app.after(3500, lambda: self.__resetText()) # pylint: disable=unnecessary-lambda
+        self.app.after(3500, lambda: self.__resetText())  # pylint: disable=unnecessary-lambda
 
     def __resetText(self):
         self.feedback_label.configure(text="", text_color="white")
@@ -185,7 +185,8 @@ class GUI:
             self.print("Invalid URL")
             return
 
-    def on_progress(self, stream: pt.Stream, chunk: bytes, bytes_remaining: int) -> None: # pylint: disable=unused-argument
+    # pylint: disable=unused-argument
+    def on_progress(self, stream: pt.Stream, chunk: bytes, bytes_remaining: int) -> None:
         total_size = stream.filesize
         bytes_downloaded = total_size - bytes_remaining
         percent = (bytes_downloaded / total_size)
@@ -205,7 +206,7 @@ class GUI:
         seconds_remaining = int(seconds_remaining)
         self.stats_label.configure(text=self.convertStatsString(seconds_remaining, total_size, stream.title))
 
-    def on_complete(self, stream: pt.Stream, file_path: str) -> None: # pylint: disable=unused-argument
+    def on_complete(self, stream: pt.Stream, file_path: str) -> None:  # pylint: disable=unused-argument
         self.progress_bar.set(1)
         self.progress_label.configure(text="100%")
         self.progress_bar.configure(progress_color="green")
@@ -220,7 +221,7 @@ class GUI:
 
     @staticmethod
     def convertSeconds(seconds):
-        if seconds < 60: # pylint: disable=no-else-return
+        if seconds < 60:  # pylint: disable=no-else-return
             return f"{seconds}s"
         elif seconds < 3600:
             return f"{round(seconds / 60, 2)}m"
@@ -229,7 +230,7 @@ class GUI:
 
     @staticmethod
     def convertSize(size):
-        if size < 1_000_000: # pylint: disable=no-else-return
+        if size < 1_000_000:  # pylint: disable=no-else-return
             return f"{round(size / 1_000, 2)}KB"
         elif size < 1_000_000_000:
             return f"{round(size / 1_000_000, 2)}MB"
