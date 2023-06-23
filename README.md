@@ -13,12 +13,12 @@ It's combined with a GUI made with [Tkinter](https://docs.python.org/3/library/t
 2. Paste the link of the YouTube video you want to download into the input field
 3. Click on `Search`
 4. Fill out the options:
-   5. `Video or Audio`: Choose if you want to download the video or only the audio
-   6. `Resolution`: Choose the resolution of the video (only if you choose `Video`)
-   7. `Filename`: *[ Optional ]* Choose the filename of the downloaded file
-8. Click on `Download`
-9. Wait until the download is finished
-10. _Enjoy your downloaded video/audio_
+   1. `Video or Audio`: Choose if you want to download the video or only the audio
+   2. `Resolution`: Choose the resolution of the video (only if you choose `Video`)
+   3. `Filename`: *[ Optional ]* Choose the filename of the downloaded file
+5. Click on `Download`
+6. Wait until the download is finished
+7. _Enjoy your downloaded video/audio_
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
