@@ -5,8 +5,8 @@ The Goal of this project is to create a simple GUI to download videos or playlis
 Ideas:
 - Resolution [✅]
 - Downloading progress [✅]
-- save name [❌]
-- audio and video and file format options [❌]
+- save name [✅]
+- audio and video and file format options [❓]
 - progress bar [✅]
 - expected time and file size [✅]
 - video title [✅]
@@ -25,7 +25,6 @@ import time as t
 import _thread
 from datetime import datetime
 import os
-from moviepy.editor import *
 
 
 class GUI:
@@ -155,10 +154,6 @@ class GUI:
     def convertToMP3(self, fileName):
         # rename
         os.rename(fileName, fileName.replace(".mp4", ".mp3"))
-        return fileName.replace(".mp4", ".mp3")
-        video = VideoFileClip(fileName)
-        video.audio.write_audiofile(fileName.replace(".mp4", ".mp3"))
-        os.remove(fileName)
         return fileName.replace(".mp4", ".mp3")
 
     def search(self, url):
