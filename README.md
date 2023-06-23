@@ -1,3 +1,5 @@
+[![Pylint](https://github.com/domx4q/youtubeDownloader/actions/workflows/pylint.yml/badge.svg)](https://github.com/domx4q/youtubeDownloader/actions/workflows/pylint.yml)
+
 ## _Warning_
 Currently, this project won't work properly because of a bug in [PyTube #1678](https://github.com/pytube/pytube/issues/1678).
 There is a temporary fix (see here [Fix](https://github.com/pytube/pytube/issues/1678#issuecomment-1603948730)), but it's currently not applied for a release.
