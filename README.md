@@ -1,5 +1,6 @@
 ## Overview
-This Project uses [PyTube](https://github.com/pytube/pytube) to download YouTube videos.<br>It's combined with a GUI made with [Tkinter](https://docs.python.org/3/library/tkinter.html) and [PySimpleGUI](https://pysimplegui.readthedocs.io/en/latest/).<br>
+This Project uses [PyTube](https://github.com/pytube/pytube) to download YouTube videos.<br>
+It's combined with a GUI made with [Tkinter](https://docs.python.org/3/library/tkinter.html) and [CustomTkinter](https://github.com/TomSchimansky/CustomTkinter).
 
 ## Installation and Usage
 ### Installation
