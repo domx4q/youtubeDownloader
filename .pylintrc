@@ -8,4 +8,4 @@ enable=
     useless-suppression,
 
 disable=
-    snake-case,
+    invalid-name,
