@@ -1,3 +1,8 @@
+## _Warning_
+Currently, this project won't work properly because of a bug in [PyTube #1678](https://github.com/pytube/pytube/issues/1678).
+There is a temporary fix (see here [Fix](https://github.com/pytube/pytube/issues/1678#issuecomment-1603948730)), but it's currently not applied for a release.
+So the fix need to be applied manually.
+
 # Overview
 This Project uses [PyTube](https://github.com/pytube/pytube) to download YouTube videos.<br>
 It's combined with a GUI made with [Tkinter](https://docs.python.org/3/library/tkinter.html) and [CustomTkinter](https://github.com/TomSchimansky/CustomTkinter).

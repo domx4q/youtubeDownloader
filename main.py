@@ -13,21 +13,20 @@ Ideas:
 - hyperlink to open file [❌]
 """
 
-import tkinter as tk
-import customtkinter as ctk
-import pytube
-import pytube as pt
-from pytube.exceptions import *
-import re
-import os
-import sys
-import time as t
 import _thread
-from datetime import datetime
 import os
+from datetime import datetime
+
+import customtkinter as ctk
+import pytube as pt
+import pytube.exceptions
 
 
 class GUI:
+    """
+    This class contains the GUI for the project.
+    """
+
     def __init__(self):
         self.download_start_time = None
         self.progress_bar = None
@@ -36,7 +35,9 @@ class GUI:
         self.download_button = None
         self.hidden_group = None
         self.videoSettings = {}
-        self.file_name: ctk.CTkEntry = None
+        self.file_name = None
+        self.progress_label = None
+        self.stats_label = None
 
         ctk.set_appearance_mode("dark")
         ctk.set_default_color_theme("blue")
@@ -62,9 +63,11 @@ class GUI:
         resolution_label = ctk.CTkLabel(self.hidden_group, text="Settings")
         resolution_label.pack(fill="x", padx=10, pady=10)
 
-        mode_select = ctk.CTkComboBox(self.hidden_group, values=["Video", "Audio"], command=lambda x: self.update_settings("mode", x))
+        mode_select = ctk.CTkComboBox(self.hidden_group, values=["Video", "Audio"],
+                                      command=lambda x: self.update_settings("mode", x))
         mode_select.pack(fill="x", padx=10, pady=10)
-        self.resolution_select = ctk.CTkComboBox(self.hidden_group, values=["Lädt ..."], command=lambda x: self.update_settings("resolution", x))
+        self.resolution_select = ctk.CTkComboBox(self.hidden_group, values=["Lädt ..."],
+                                                 command=lambda x: self.update_settings("resolution", x))
         self.resolution_select.pack(fill="x", padx=10, pady=10)
 
         self.file_name = ctk.CTkEntry(self.hidden_group, placeholder_text="Enter file name")
@@ -73,8 +76,10 @@ class GUI:
         # endregion hidden group
 
         self.download_button = ctk.CTkButton(self.app, text="Download")
+
         def lDownload():
             _thread.start_new_thread(self.download, (url_input.get(),))
+
         self.download_button.configure(command=lDownload)
 
         progress_area = ctk.CTkFrame(self.app)
@@ -120,7 +125,7 @@ class GUI:
                                on_progress_callback=self.on_progress,
                                on_complete_callback=self.on_complete)
             self.resetProgress()
-        except RegexMatchError:
+        except pytube.exceptions.RegexMatchError:
             self.print("Invalid URL")
             return
 
@@ -137,7 +142,7 @@ class GUI:
             stream = streams.filter(only_audio=True).first()
         extension = "." + stream.default_filename.rsplit(".", 1)[1]
         if self.file_name.get() == "":
-            fileName = video.title
+            fileName = stream.default_filename.rsplit(".", 1)[0]
         else:
             fileName = self.file_name.get()
         IS_MP3 = False
@@ -151,7 +156,8 @@ class GUI:
             self.convertToMP3("downloads/" + fileName)
             self.print("Converted to MP3")
 
-    def convertToMP3(self, fileName):
+    @staticmethod
+    def convertToMP3(fileName):
         # rename
         os.rename(fileName, fileName.replace(".mp4", ".mp3"))
         return fileName.replace(".mp4", ".mp3")
@@ -163,21 +169,23 @@ class GUI:
             resolutions = list(video.streams.filter(progressive=True).order_by("resolution").desc())
             resolutions = [resolution.resolution for resolution in resolutions]
             resolutions.append("max")
-            self.resolution_select.destroy() # we need to recreate the entire combobox because we can't change the values
-            self.resolution_select = ctk.CTkComboBox(self.hidden_group, values=resolutions, command=lambda x: self.update_settings("resolution", x))
+            # we need to recreate the entire combobox because we can't change the values
+            self.resolution_select.destroy()
+            self.resolution_select = ctk.CTkComboBox(self.hidden_group, values=resolutions,
+                                                     command=lambda x: self.update_settings("resolution", x))
             self.resolution_select.pack(fill="x", padx=10, pady=10)
             self.file_name.configure(placeholder_text=video.title)
 
             self.download_button.pack_forget()
             self.hidden_group.pack(fill="x", padx=10, pady=10)
-            self.download_button.pack(fill="x", padx=10, pady=10) # pack again to make it appear at the bottom
+            self.download_button.pack(fill="x", padx=10, pady=10)  # pack again to make it appear at the bottom
 
             self.update_settings("resolution", resolutions[0])
-        except RegexMatchError:
+        except pytube.exceptions.RegexMatchError:
             self.print("Invalid URL")
             return
 
-    def on_progress(self, stream:pytube.Stream, chunk, bytes_remaining):
+    def on_progress(self, stream: pt.Stream, chunk, bytes_remaining):
         total_size = stream.filesize
         bytes_downloaded = total_size - bytes_remaining
         percent = (bytes_downloaded / total_size)

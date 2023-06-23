@@ -1,0 +1,11 @@
+[MAIN]
+suggestion-mode=yes
+
+
+[MESSAGES CONTROL]
+enable=
+    use-symbolic-message-instead,
+    useless-suppression,
+
+disable=
+    snake-case,
