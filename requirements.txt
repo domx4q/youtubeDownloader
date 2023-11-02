@@ -1,2 +1,2 @@
-customtkinter==5.2.0
+customtkinter~=5.2.1
 pytube~=15.0.0
